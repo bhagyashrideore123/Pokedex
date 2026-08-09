@@ -1,0 +1,29 @@
+@media screen and (min-width: 300px) and (max-width: 480px) {
+    .pokeyCard {
+        width: 200px;
+        height: 300px;
+        img{
+            padding: 10px;
+        }
+        .card-background {
+            width: 200px;
+            height: 100px;
+        }
+    }
+
+    input{
+
+        width:60%;
+    }
+    main {
+    button {
+        width: 30%;
+    }
+}
+}
+
+@media screen and (min-width: 481px) and (max-width: 768px) {
+    input{
+            width: 50%;
+        }
+}

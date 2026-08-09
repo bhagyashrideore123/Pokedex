@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokedex</title>
+    <script src="./script.js" defer></script>
+    <script src="./scripts/template.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./styles/assets.css">
+    <link rel="stylesheet" href="./styles/variable.css">
+    <link rel="stylesheet" href="./styles/color.css">
+    <link rel="stylesheet" href="./styles/responsive.css">
+    <link rel="shortcut icon" href="./assets/icons/favicon.ico" type="image/x-icon">
+</head>
+
+<body onload="init()">
+    <header>
+        <div class="content">
+            <img src="./assets/icons/pokeball.png" alt="pokeball_image_as_logo">
+            <p>Pokeydex</p>
+            <input type="text" placeholder="Search your pokeymon here.." id="search-input">
+            <button id="search-button" onclick="searchPokeymon()">Search</button>
+        </div>
+    </header>
+    <main id="content">
+        <p id="not-found" class="spacing"></p>
+        <div class="pokeyCardWrapper" id="card"></div>
+        <dialog id="dialog" aria-labelledby="dialogTitle" aria-describedby="This is Pokeymon view"></dialog>
+        <button id="load-more-button" onclick="loadMorePOkey()">Load more</button>
+    </main>
+    <footer>
+        <div class="content">
+            <p>@2026_Shree's_Pokeydex</p>
+            <p><a target="_blank" href="https://github.com/bhagyashrideore123">Github</a></p>
+        </div>       
+    </footer>
+</body>
+
+</html>
