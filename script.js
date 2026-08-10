@@ -140,14 +140,12 @@ function renderAbilitiesPokeymon(dialogArray, index) {
     let pokemonAbilities = " ";
     for (let i = 0; i < dialogArray[index].abilities.length; i++) {
         const abilities = dialogArray[index].abilities[i].ability.name;
-        console.log(abilities);
         pokemonAbilities += `<span class="alignRowClass">${abilities} </span>`;
     }
     return pokemonAbilities;
 }
 
 async function openDialog(dialogArray, index) {
-    console.log(dialogArray);
     const hpStatObj = dialogArray[index].stats.find(
         (item) => item.stat.name === "hp",
     );

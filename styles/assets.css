@@ -108,6 +108,7 @@ button{
 	cursor: pointer;
 	outline: inherit;
 }
+
 button:hover{
     background-color: var(--button-background-color);
 }
@@ -146,6 +147,7 @@ dialog{
         height:65px;
     }
 }
+
 dialog::backdrop
 {
     background: var(--opacity-color);
