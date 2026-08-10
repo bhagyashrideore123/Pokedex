@@ -2,47 +2,78 @@ function renderPokeyCard(currentArray, index) {
     return /*html*/ `
         <div class="pokeyCard" >
             <header>   
-                <p>${currentArray.id}</p>
+                <p>#${currentArray.id}</p>
                 <p>${currentArray.name.toUpperCase()}</p>
             </header>         
             <img id="card-image" src=${currentArray.sprites.other.dream_world.front_default} alt=${currentArray.name} onclick="openPokeymonDialog(${index})" aria-haspopup="dialog" aria-controls="dialog">
-            <div id="pokey_type">${renderTypes(currentArray, index)}</div>
+            <div class="paddTopBottom" id="pokey_type">${renderTypes(currentArray, index)}</div>
         </div>
 
     `;
 }
 
-function renderPokeymonDialog(index, dialogArray, hpvalue, category, description) {
+function renderPokeymonDialog(
+    index,
+    dialogArray,
+    hpvalue,
+    category,
+    description,
+    types,
+) {
     return /*html*/ `
-        <section class="alignRowClass">
-            <p>#${dialogArray[index].id}</p>
-            <p id="dialogTitle">${dialogArray[index].name}</p>
-            <button tabindex="0"> 
+        <section class="alignRowClass headerSec">
+            <p class="fontBold">#${dialogArray[index].id}</p>
+            <p id="dialogTitle fontBold">${dialogArray[index].name.toUpperCase()}</p>
+            <button class="buttonCls" tabindex="0"> 
                 <img tabindex="0" src="./assets/icons/close.svg" alt="close_button" onclick="closeDialog()"/>
             </button>
         </section>
-        <section class="alignColClass">
-            <img src=${dialogArray[index].sprites.other.dream_world.front_default} alt=${dialogArray[index].name}>
-            <p>${description} </p>
-        </section>
-        <div class="marginTop">
-            <div class="alignRowClass">
-                <div><p>Height:${dialogArray[index].height}'</p></div>
-                <div><p>Weight:${dialogArray[index].weight}lbs</p></div>
+        <div class="cardsWrapper">
+            <div class="alignColClass pokemon-info-card">
+                <img src=${dialogArray[index].sprites.other.dream_world.front_default} alt=${dialogArray[index].name}>
+                <p>${description} </p>
             </div>
-            <div class="alignRowClass">
-                <div><p>Hit Points:${hpvalue}</p></div>
-                <div><p>Category:${category}</p></div>
+        
+            <div class="pokemon-info-card">
+                    <div class="info-row">
+                        <div class="info-group">
+                            <span class="info-label">Height</span>
+                            <span class="info-value">${dialogArray[index].height}</span>
+                        </div>
+                        <div class="info-group">
+                            <span class="info-label">Category</span>
+                            <span class="info-value">${category}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-row">
+                        <div class="info-group">
+                            <span class="info-label">Weight</span>
+                            <span class="info-value">${dialogArray[index].weight}lbs</span>
+                        </div>
+                        <div class="info-group">
+                            <span class="info-label">Abilities</span>
+                            <span class="info-value">${renderAbilitiesPokeymon(dialogArray, index)}</span>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-group">
+                                <span class="info-label">Hit Points</span>
+                                <span class="info-value">${hpvalue}</span>
+                        </div>
+                    </div>
             </div>
         </div>
-        
-        <section class="alignRowClass marginTop">
+        <div class="marginTop">
+            <div class="dialogTypes">${renderTypes(dialogArray[index], index)}</div>
+        </div>
+        <footer class="alignRowClass marginTop">
             <div id="backwardDiv">
-                <button class="buttonCls" id="backward" onclick="gobackward(${index})">Prev</button>
+                <button class="buttonCls" id="backward" onclick="gobackward(${index})"><img src="./assets/icons/backward.svg" alt=""></button>
             </div>
             <div id="forwardDiv">
-                <button  class="buttonCls" id="forward" onclick="goForward(${index})">Next</button>
+                <button  class="buttonCls" id="forward" onclick="goForward(${index})"><img src="./assets/icons/forward.svg" alt=""></button>
             </div>
-        </section>
+        </footer>
     `;
 }

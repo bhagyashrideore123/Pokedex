@@ -2,14 +2,14 @@ const POKEY_CARD_REF = document.getElementById("card");
 const SEARCH_INPUT = document.getElementById("search-input");
 const NOT_FOUND = document.getElementById("not-found");
 const DIALOG = document.getElementById("dialog");
+const LOAD_MORE_BUTTON = document.getElementById("load-more-button");
+const SPINNER = document.getElementById("loadingSpinner");
 
-const currentArray = [];
+let currentArray = [];
+let searchResult = [];
 const nameArry = [];
 const hpStatObj = 0;
 const speciesUrl = "";
-const searchResult = [];
-// let searchCounter = 0;
-
 const typeColors = {
     fire: "#F08030",
     water: "#6890F0",
@@ -36,17 +36,23 @@ function init() {
 }
 
 async function getPokeymonsData() {
-    const offset = currentArray.length;
-    const result = await fetch(
-        `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${offset}`,
-    );
-    const resultAsJson = await result.json();
-    const resultNames = resultAsJson.results;
-    for (const pkm of resultNames) {
-        nameArry.push(pkm);
-        await getIndivisualPokeymoninfo(pkm);
+    showLoader();
+    try {
+        const offset = currentArray.length;
+        const result = await fetch(
+            `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${offset}`,
+        );
+        const resultAsJson = await result.json();
+        const resultNames = resultAsJson.results;
+        for (const pkm of resultNames) {
+            nameArry.push(pkm);
+            await getIndivisualPokeymoninfo(pkm);
+        }
+        renderPokeymon();
+    } catch (error) {
+        console.log(error);
     }
-    renderPokeymon();
+    hideLoader();
 }
 
 async function getIndivisualPokeymoninfo(API_POKEYMON_INFO) {
@@ -56,16 +62,11 @@ async function getIndivisualPokeymoninfo(API_POKEYMON_INFO) {
 }
 
 function renderPokeymon() {
-    if (searchResult.length) {
-        for (let i = 0; i < searchResult.length; i++) {
-            const element = searchResult[i];
-            POKEY_CARD_REF.innerHTML += renderPokeyCard(element, i);
-        }
-    } else {
-        for (let i = 0; i < currentArray.length; i++) {
-            const element = currentArray[i];
-            POKEY_CARD_REF.innerHTML += renderPokeyCard(element, i);
-        }
+    POKEY_CARD_REF.innerHTML = "";
+    let renderArray = searchResult.length ? searchResult : currentArray;
+    for (let i = 0; i < renderArray.length; i++) {
+        const element = renderArray[i];
+        POKEY_CARD_REF.innerHTML += renderPokeyCard(element, i);
     }
 }
 
@@ -78,42 +79,75 @@ function renderTypes(info, index) {
     return pokemonTypes;
 }
 
-function searchPokeymon() {
-    let keyword = SEARCH_INPUT.value;
-    if (keyword.length >= 3) {
-        POKEY_CARD_REF.innerText = "";
-        currentArray.filter((pokey) => {
-            if (pokey.name.includes(keyword)) {
-                searchResult.push(pokey);
-                NOT_FOUND.innerText = "";
-            } else {
-                NOT_FOUND.innerText = "No Match Found.";
-                POKEY_CARD_REF.innerText = "";
-            }
+function pokeymonTypes(index) {
+    let typesPokey = [];
+    let typesArray = searchResult.length ? searchResult : currentArray;
+    for (const element of typesArray[index].types) {
+        typesPokey.push({
+            name: element.type.name,
+            color: typeColors[element.type.name],
         });
-        renderPokeymon();
-    } else {
-        POKEY_CARD_REF.innerText = "";
-        NOT_FOUND.innerText ="Please enter min 3 Characters to search the Pokeymon.";
     }
+    return typesPokey;
+}
+
+function searchPokeymon() {
+    showLoader();
+    try {
+        LOAD_MORE_BUTTON.style.display = "none";
+        let keyword = SEARCH_INPUT.value;
+        if (keyword.length >= 3) {
+            POKEY_CARD_REF.innerText = " ";
+            currentArray.filter((pokey) => {
+                if (pokey.name.includes(keyword)) {
+                    searchResult.push(pokey);
+                    NOT_FOUND.innerText = " ";
+                    POKEY_CARD_REF.innerText = " ";
+                } else {
+                    NOT_FOUND.innerText = "No Match Found.";
+                    POKEY_CARD_REF.innerText = " ";
+                }
+            });
+            renderPokeymon();
+        } else {
+            POKEY_CARD_REF.innerText = " ";
+            NOT_FOUND.innerText =
+                "Please enter min 3 Characters to search the Pokeymon.";
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    hideLoader();
 }
 
 async function loadMorePOkey() {
-    // const result = await fetch(loadMorePokeymopnsAPILink);
-    // const resultAsJson = await result.json();
-    // nameArry = nameArry.concat(resultAsJson.results);
-    // loadMorePokeymopnsAPILink = resultAsJson.next;
+    showLoader();
+    try {
+        getPokeymonsData();
+    } catch (error) {
+        console.log(error);
+    }
+    hideLoader();
 }
 
 function openPokeymonDialog(index) {
-    if (searchResult.length) {
-        openDialog(searchResult,index);
-    } else {
-        openDialog(currentArray,index);
-    }
+    let dialogArray = [];
+    dialogArray = searchResult.length ? searchResult : currentArray;
+    openDialog(dialogArray, index);
 }
 
-async function openDialog(dialogArray,index) {
+function renderAbilitiesPokeymon(dialogArray, index) {
+    let pokemonAbilities = " ";
+    for (let i = 0; i < dialogArray[index].abilities.length; i++) {
+        const abilities = dialogArray[index].abilities[i].ability.name;
+        console.log(abilities);
+        pokemonAbilities += `<span class="alignRowClass">${abilities} </span>`;
+    }
+    return pokemonAbilities;
+}
+
+async function openDialog(dialogArray, index) {
+    console.log(dialogArray);
     const hpStatObj = dialogArray[index].stats.find(
         (item) => item.stat.name === "hp",
     );
@@ -121,7 +155,22 @@ async function openDialog(dialogArray,index) {
     const speciesUrl = dialogArray[index].species.url;
     const category = await getCategory(speciesUrl);
     const description = await getDescrition(speciesUrl);
-    DIALOG.innerHTML = renderPokeymonDialog(index,dialogArray,hpvalue,category,description);
+    const types = pokeymonTypes(index);
+    if (types.length === 2) {
+        DIALOG.style.background = `radial-gradient(circle, ${types[0].color} 0%, ${types[1].color} 100%)`;
+    } else if (types.length === 1) {
+        DIALOG.style.background = `radial-gradient(circle, ${types[0].color} 0%, #ffffff 100%)`;
+    } else {
+        DIALOG.style.background = "#ffffff";
+    }
+    DIALOG.innerHTML = renderPokeymonDialog(
+        index,
+        dialogArray,
+        hpvalue,
+        category,
+        description,
+        types,
+    );
     DIALOG.showModal();
 }
 
@@ -156,29 +205,20 @@ function closeDialog() {
 }
 
 function goForward(index) {
-    if(searchResult.length)
-    {
-        if (index >= 0 && index < searchResult.length - 1) {
-            index++;
-            openPokeymonDialog(index);
-        } else {
-            index = 0;
-            openPokeymonDialog(index);
-        }
-    }else{
-        if (index >= 0 && index < currentArray.length - 1) {
+    let ArrayForward = searchResult.length ? searchResult : currentArray;
+    if (index >= 0 && index < ArrayForward.length - 1) {
         index++;
         openPokeymonDialog(index);
-        } else {
-            index = 0;
-            openPokeymonDialog(index);
-        }
+    } else {
+        index = 0;
+        openPokeymonDialog(index);
     }
 }
 
 function gobackward(index) {
+    let ArrayBackward = searchResult.length ? searchResult : currentArray;
     if (index == 0) {
-        index = currentArray.length - 1;
+        index = ArrayBackward.length - 1;
         openPokeymonDialog(index);
     } else {
         index--;
@@ -191,3 +231,11 @@ DIALOG.addEventListener("click", (event) => {
         DIALOG.close();
     }
 });
+
+function showLoader() {
+    SPINNER.classList.remove("hidden");
+}
+
+function hideLoader() {
+    SPINNER.classList.add("hidden");
+}

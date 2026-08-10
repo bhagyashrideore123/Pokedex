@@ -20,6 +20,7 @@ header{
         transform: rotate(45deg);
         background: var(--logo-color);
         border-radius: 100%;
+        animation: spin 1s linear infinite;
     }
     img:hover{
         background: var(--logo-color-hover);
@@ -30,6 +31,16 @@ header{
         align-items: center;
     }
 }
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 footer{
     width: 100%;
     height: 100px;
@@ -54,7 +65,11 @@ main{
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-
+    
+    .content{
+        flex-direction: column;
+        align-items: center;
+    }
     button{
         width: 15%;
         margin-bottom: 20px;
@@ -100,18 +115,35 @@ button:hover{
 dialog{
     background-color: var(--card-base-color);
     border-radius: 40px;
-    padding: 25px;
     border: none;
     width: 600px;
     height: 650px;
     position: fixed;
     margin: auto; 
+    img{
+        filter: drop-shadow(0 30px 10px #613232);
+        transition: all 0.3s ease-in-out;
+    }
+    img:hover{
+        transform: scale(1.1);
+    }
+    .headerSec{
+        background: #00000059;
+        padding: 10px;
+    }
     p{
         font-size: 20px;
     }
     button{
         width: auto;
         margin: 0;
+    }
+    footer{
+        position: absolute;
+        bottom: 0;
+        background:  #00000059;
+        padding: 20px;
+        height:65px;
     }
 }
 dialog::backdrop

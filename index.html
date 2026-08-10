@@ -25,10 +25,18 @@
         </div>
     </header>
     <main id="content">
-        <p id="not-found" class="spacing"></p>
-        <div class="pokeyCardWrapper" id="card"></div>
-        <dialog id="dialog" aria-labelledby="dialogTitle" aria-describedby="This is Pokeymon view"></dialog>
-        <button id="load-more-button" onclick="loadMorePOkey()">Load more</button>
+        <div class="content">
+            <p id="not-found" class="spacing"></p>
+            <div class="pokeyCardWrapper" id="card"></div>
+            <dialog id="dialog" aria-labelledby="dialogTitle" aria-describedby="This is Pokeymon view"></dialog>
+            <button id="load-more-button" onclick="loadMorePOkey()">Load more</button>
+        </div>
+        <div id="loadingSpinner" class="spinner-overlay">
+            <div class="spinner-container">
+            <img src="./assets/icons/pokeball.png" alt="Loading..." class="pokeball-spinner">
+            <p>Loading Pokémon...</p>
+        </div>
+</div>
     </main>
     <footer>
         <div class="content">
