@@ -123,7 +123,6 @@ async function loadMorePOkey() {
     try {
         getPokeymonsData();
     } catch (error) {}
-    setTimeout
     hideLoader();
 }
 
