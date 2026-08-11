@@ -24,17 +24,17 @@ function renderPokeymonDialog(
         <section class="alignRowClass headerSec">
             <p class="fontBold">#${dialogArray[index].id}</p>
             <p id="dialogTitle fontBold">${dialogArray[index].name.toUpperCase()}</p>
-            <button class="buttonCls" tabindex="0"> 
+            <button class="buttonCls closeBtn" tabindex="0"> 
                 <img tabindex="0" src="./assets/icons/close.svg" alt="close_button" onclick="closeDialog()"/>
             </button>
         </section>
         <div class="cardsWrapper">
-            <div class="alignColClass pokemon-info-card">
+            <div class="alignColClass pokemon-info-card fixHeight">
                 <img src=${dialogArray[index].sprites.other.dream_world.front_default} alt=${dialogArray[index].name}>
                 <p>${description} </p>
             </div>
         
-            <div class="pokemon-info-card">
+            <div class="pokemon-info-card fixHeight">
                     <div class="info-row">
                         <div class="info-group">
                             <span class="info-label">Height</span>
@@ -64,13 +64,11 @@ function renderPokeymonDialog(
                     </div>
             </div>
         </div>
-        <div class="marginTop">
-            <div class="dialogTypes">${renderTypes(dialogArray[index], index)}</div>
-        </div>
         <footer class="alignRowClass marginTop">
             <div id="backwardDiv">
                 <button class="buttonCls" id="backward" onclick="gobackward(${index})"><img src="./assets/icons/backward.svg" alt=""></button>
             </div>
+            <div class="dialogTypes">${renderTypes(dialogArray[index], index)}</div>
             <div id="forwardDiv">
                 <button  class="buttonCls" id="forward" onclick="goForward(${index})"><img src="./assets/icons/forward.svg" alt=""></button>
             </div>

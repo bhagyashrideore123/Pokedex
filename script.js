@@ -49,9 +49,7 @@ async function getPokeymonsData() {
             await getIndivisualPokeymoninfo(pkm);
         }
         renderPokeymon();
-    } catch (error) {
-        console.log(error);
-    }
+    } catch (error) {}
     hideLoader();
 }
 
@@ -96,27 +94,27 @@ function searchPokeymon() {
     try {
         LOAD_MORE_BUTTON.style.display = "none";
         let keyword = SEARCH_INPUT.value;
-        if (keyword.length >= 3) {
-            POKEY_CARD_REF.innerText = " ";
-            currentArray.filter((pokey) => {
-                if (pokey.name.includes(keyword)) {
-                    searchResult.push(pokey);
-                    NOT_FOUND.innerText = " ";
-                    POKEY_CARD_REF.innerText = " ";
-                } else {
-                    NOT_FOUND.innerText = "No Match Found.";
-                    POKEY_CARD_REF.innerText = " ";
-                }
-            });
+        searchResult = [];
+        NOT_FOUND.innerText = "";
+        POKEY_CARD_REF.innerHTML = "";
+        if (keyword.length === 0) {
             renderPokeymon();
-        } else {
-            POKEY_CARD_REF.innerText = " ";
+            LOAD_MORE_BUTTON.style.display = "block";
+        } else if (keyword.length < 3) {
             NOT_FOUND.innerText =
                 "Please enter min 3 Characters to search the Pokeymon.";
+        } else {
+            searchResult = currentArray.filter((pokey) =>
+                pokey.name.includes(keyword),
+            );
+            if (searchResult.length === 0) {
+                NOT_FOUND.innerText = "No Match Found.";
+            } else {
+                NOT_FOUND.innerText = "";
+                renderPokeymon();
+            }
         }
-    } catch (error) {
-        console.log(error);
-    }
+    } catch (error) {}
     hideLoader();
 }
 
@@ -124,16 +122,9 @@ async function loadMorePOkey() {
     showLoader();
     try {
         getPokeymonsData();
-    } catch (error) {
-        console.log(error);
-    }
+    } catch (error) {}
+    setTimeout
     hideLoader();
-}
-
-function openPokeymonDialog(index) {
-    let dialogArray = [];
-    dialogArray = searchResult.length ? searchResult : currentArray;
-    openDialog(dialogArray, index);
 }
 
 function renderAbilitiesPokeymon(dialogArray, index) {
@@ -143,6 +134,12 @@ function renderAbilitiesPokeymon(dialogArray, index) {
         pokemonAbilities += `<span class="alignRowClass">${abilities} </span>`;
     }
     return pokemonAbilities;
+}
+
+function openPokeymonDialog(index) {
+    let dialogArray = [];
+    dialogArray = searchResult.length ? searchResult : currentArray;
+    openDialog(dialogArray, index);
 }
 
 async function openDialog(dialogArray, index) {
@@ -155,12 +152,13 @@ async function openDialog(dialogArray, index) {
     const description = await getDescrition(speciesUrl);
     const types = pokeymonTypes(index);
     if (types.length === 2) {
-        DIALOG.style.background = `radial-gradient(circle, ${types[0].color} 0%, ${types[1].color} 100%)`;
+        DIALOG.style.background = `radial-gradient(circle, ${types[0].color} 10%, ${types[1].color} 100%)`;
     } else if (types.length === 1) {
         DIALOG.style.background = `radial-gradient(circle, ${types[0].color} 0%, #ffffff 100%)`;
     } else {
         DIALOG.style.background = "#ffffff";
     }
+    document.body.style.overflow = "hidden";
     DIALOG.innerHTML = renderPokeymonDialog(
         index,
         dialogArray,
@@ -199,6 +197,7 @@ async function getDescrition(speciesUrl) {
 }
 
 function closeDialog() {
+    document.body.style.overflow = "auto";
     DIALOG.close();
 }
 
@@ -224,8 +223,9 @@ function gobackward(index) {
     }
 }
 
-DIALOG.addEventListener("click", (event) => {
+DIALOG.addEventListener("click", (event) => {   
     if (event.target === dialog) {
+        document.body.style.overflow = "auto";
         DIALOG.close();
     }
 });

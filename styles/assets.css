@@ -30,6 +30,10 @@ header{
         gap: 30px;
         align-items: center;
     }
+    p {
+        font-size: 1.5rem;
+        color: #ffffff;
+    }
 }
 
 @keyframes spin {
@@ -51,6 +55,11 @@ footer{
     padding: 30px;
     p {
         font-size: 1.5rem;
+        color: #ffffff;
+    }
+    a{
+        font-size: 1.5rem;
+        color: #ffffff;
     }
     .content{
         justify-content: space-between;

@@ -21,7 +21,6 @@
     display: flex;
 }
 
-
 .pokeyCard {
     width: 280px;
     height: 420px;
@@ -105,7 +104,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-
+    gap: 5px;
     .buttonCls{
         background: none;
         color: inherit;
@@ -152,9 +151,12 @@
 
 .dialogTypes{
     display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding-bottom: 20px;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.closeBtn{
+    width: unset;
 }
 
 .spinner-container {
@@ -195,12 +197,14 @@
     justify-content: space-between;
     padding: 20px;
 }
+
 .pokemon-info-card {
     background-color: #00000038;
     border-radius: 16px;
     padding: 30px;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: 20px;
     width: 100%;
     max-width: 500px;
@@ -230,4 +234,10 @@
 .info-value {
     font-size: 20px;
     font-weight: 700;
+}
+
+.buttonCls:disabled {
+    background: #98d8d8;
+    opacity: 0.5;
+    border-radius: 100%;
 }

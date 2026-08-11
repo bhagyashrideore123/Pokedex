@@ -4,23 +4,28 @@
         align-items: center;
     }
     .pokemon-info-card {
-        padding: 15px;
-        gap: 10px;
+        padding: 10px;
+        gap: 8px;
     }
     dialog{
         border-radius: 10px;
         height: 700px;
         footer {
-            position: unset;
+            position: absolute;
+            bottom: 0;
         }
         p{
             font-size: 16px;
         }
+        .pokemon-type {
+            font-size: 16px;
+            padding: 5px 18px;
+        }
     }
     .alignColClass {
         img {
-            width: 150px;
-            height: 150px;
+            width: 120px;
+            height: 120px;
             object-fit: contain;
         }
     }
@@ -54,6 +59,9 @@
         .content{
             padding-bottom: 15dvh;
         }
+        button{
+            width: 30%;
+        }
     }
     footer {
         height: 120px;
@@ -86,14 +94,25 @@
         align-items: center;
     }
     .pokemon-info-card {
-        padding: 15px;
-        gap: 10px;
+        padding: 10px;
+        gap: 8px;
     }
     dialog{
         border-radius: 10px;
         height: 700px;
+        .alignColClass {
+            img {
+                width: 150px;
+                height: 150px;
+                object-fit: contain;
+            }
+        }
         footer {
-            position: unset;
+            position: absolute;
+            bottom: 0;
+        }
+        .fixHeight{
+            height: 260px;
         }
     }
     .pokeyCard {
@@ -134,6 +153,14 @@
         }
         .content{
             gap: 20px;
+        }
+    }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1024px){
+    dialog{
+        .fixHeight{
+            height:unset;
         }
     }
 }
