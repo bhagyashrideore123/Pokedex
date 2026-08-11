@@ -35,8 +35,8 @@
     border: 1px solid rgba(255, 255, 255, 0.4);
     cursor: pointer;
         img {
-            width: 160px;
-            height: 160px;
+            width: 200px;
+            height: 200px;
             object-fit: contain;
             z-index: 2;
             filter: drop-shadow(0 30px 12px rgba(44, 40, 40, 0.25));
