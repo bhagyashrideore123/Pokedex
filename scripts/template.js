@@ -34,7 +34,7 @@ function renderPokeymonDialog(
                 <p>${description} </p>
             </div>
         
-            <div class="pokemon-info-card fixHeight">
+            <div class="pokemon-info-card fixInnerHeight">
                     <div class="info-row">
                         <div class="info-group">
                             <span class="info-label">Height</span>

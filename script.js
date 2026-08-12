@@ -35,6 +35,13 @@ function init() {
     getPokeymonsData();
 }
 
+function resetSearch()
+{
+    searchResult = [];
+    SEARCH_INPUT.value = "";
+    renderPokeymon();
+}
+
 async function getPokeymonsData() {
     showLoader();
     try {
@@ -89,33 +96,27 @@ function pokeymonTypes(index) {
     return typesPokey;
 }
 
-function searchPokeymon() {
-    showLoader();
-    try {
-        LOAD_MORE_BUTTON.style.display = "none";
-        let keyword = SEARCH_INPUT.value;
-        searchResult = [];
-        NOT_FOUND.innerText = "";
-        POKEY_CARD_REF.innerHTML = "";
+function resetHTML()
+{
+    LOAD_MORE_BUTTON.style.display = "none";
+    searchResult = [];
+    NOT_FOUND.innerText = "";
+    POKEY_CARD_REF.innerHTML = "";
+}
+
+function searchPokeymon() { 
+        let keyword = SEARCH_INPUT.value;   
+        resetHTML();     
         if (keyword.length === 0) {
             renderPokeymon();
             LOAD_MORE_BUTTON.style.display = "block";
         } else if (keyword.length < 3) {
-            NOT_FOUND.innerText =
-                "Please enter min 3 Characters to search the Pokeymon.";
+            NOT_FOUND.innerText ="Please enter min 3 Characters to search the Pokeymon.";
         } else {
-            searchResult = currentArray.filter((pokey) =>
-                pokey.name.includes(keyword),
-            );
-            if (searchResult.length === 0) {
-                NOT_FOUND.innerText = "No Match Found.";
-            } else {
-                NOT_FOUND.innerText = "";
-                renderPokeymon();
-            }
+            searchResult = currentArray.filter((pokey) =>pokey.name.includes(keyword));
+            NOT_FOUND.innerText = searchResult.length === 0 ? "No Match Found." : "";
+            if (searchResult.length > 0) renderPokeymon();                           
         }
-    } catch (error) {}
-    hideLoader();
 }
 
 async function loadMorePOkey() {
@@ -138,34 +139,22 @@ function renderAbilitiesPokeymon(dialogArray, index) {
 function openPokeymonDialog(index) {
     let dialogArray = [];
     dialogArray = searchResult.length ? searchResult : currentArray;
-    openDialog(dialogArray, index);
-}
-
-async function openDialog(dialogArray, index) {
-    const hpStatObj = dialogArray[index].stats.find(
-        (item) => item.stat.name === "hp",
-    );
+    const hpStatObj = dialogArray[index].stats.find((item) => item.stat.name === "hp");
     const hpvalue = hpStatObj ? hpStatObj.base_stat : 0;
     const speciesUrl = dialogArray[index].species.url;
-    const category = await getCategory(speciesUrl);
-    const description = await getDescrition(speciesUrl);
     const types = pokeymonTypes(index);
-    if (types.length === 2) {
-        DIALOG.style.background = `radial-gradient(circle, ${types[0].color} 10%, ${types[1].color} 100%)`;
-    } else if (types.length === 1) {
+    openDialog(dialogArray,hpvalue,speciesUrl ,types,index);
+}
+
+async function openDialog(dialogArray,hpvalue,speciesUrl ,types,index) {    
+    const category = await getCategory(speciesUrl);
+    const description = await getDescrition(speciesUrl);  
+    DIALOG.style.background = types.length === 2 ? `radial-gradient(circle, ${types[0].color} 10%, ${types[1].color} 100%)`:"#ffffff"
+    if (types.length === 1) {
         DIALOG.style.background = `radial-gradient(circle, ${types[0].color} 0%, #ffffff 100%)`;
-    } else {
-        DIALOG.style.background = "#ffffff";
     }
     document.body.style.overflow = "hidden";
-    DIALOG.innerHTML = renderPokeymonDialog(
-        index,
-        dialogArray,
-        hpvalue,
-        category,
-        description,
-        types,
-    );
+    DIALOG.innerHTML = renderPokeymonDialog(index,dialogArray, hpvalue,category,description,types);
     DIALOG.showModal();
 }
 
